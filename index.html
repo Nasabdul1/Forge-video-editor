@@ -943,12 +943,28 @@ $('align-btn').addEventListener('click', () => {
   for (let i = activeSegs.length; i < state.segments.length; i++) {
     state.segments[i].start = null; state.segments[i].end = null;
   }
-  const last = activeSegs[activeSegs.length - 1];
-  if (last && last.start != null) {
-    state.cutoffTime = last.end;
-  } else {
-    state.cutoffTime = state.duration;
-  }
+ // ── SMART COVERAGE-BASED CUTTING ──
+const usableSegs = activeSegs.filter(s =>
+  s.imageURL && s.start != null && s.end != null
+);
+
+let lastEnd = 0;
+
+if (usableSegs.length > 0) {
+  lastEnd = usableSegs[usableSegs.length - 1].end;
+}
+
+// calculate how much of audio is actually covered by visuals
+const coverage = lastEnd / state.duration;
+
+// RULE:
+// if visuals cover most of audio → full render
+// else → trim to last meaningful scene
+if (coverage >= 0.92) {
+  state.cutoffTime = state.duration;
+} else {
+  state.cutoffTime = lastEnd;
+}
 
   state.aligned = true;
   const clipMsg = clipped ? ` · clipped at ${fmt(state.cutoffTime)} (${activeSegs.length}/${state.segments.length} scenes have images)` : '';
@@ -1126,10 +1142,17 @@ function startExport(mimeType) {
     function drawFrame() {
       const elapsed = (performance.now() - startReal) / 1000;
       if (elapsed >= cutoff) {
-        cancelAnimationFrame(frameId);
-        recorder.stop();
-        return;
-      }
+  cancelAnimationFrame(frameId);
+
+  // allow last frame/audio flush
+  setTimeout(() => {
+    try {
+      recorder.stop();
+    } catch (e) {}
+  }, 300);
+
+  return;
+}
 
       // Find active segment at elapsed time
       let activeSeg = null;
