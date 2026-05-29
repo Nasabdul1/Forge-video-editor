@@ -1068,7 +1068,9 @@ function startExport(mimeType) {
 
   const W = 1280, H = 720, FPS = 30;
   const cutoff = state.cutoffTime || state.duration;
-  const activeSegs = state.segments.filter(s => s.start != null && s.imageURL);
+  const activeSegs = state.segments
+    .filter(s => s.start != null && s.end != null && s.imageURL)
+    .sort((a, b) => a.start - b.start);
 
   // Disable buttons during render
   ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = true);
@@ -1154,15 +1156,11 @@ function startExport(mimeType) {
   return;
 }
 
-      // Find active segment at elapsed time
+      // Find active segment — "last one that has started" handles gaps cleanly
       let activeSeg = null;
       for (const s of activeSegs) {
-        if (elapsed >= s.start && elapsed < s.end) { activeSeg = s; break; }
-      }
-      // Also check last segment right at its boundary
-      if (!activeSeg) {
-        const last = activeSegs[activeSegs.length - 1];
-        if (last && elapsed >= last.start) activeSeg = last;
+        if (s.start <= elapsed) activeSeg = s;
+        if (s.start <= elapsed && elapsed < s.end) break;
       }
 
       ctx2d.fillStyle = '#0a0a0b';
