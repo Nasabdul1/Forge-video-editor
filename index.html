@@ -364,6 +364,22 @@ Narration: &quot;And so on.&quot;
         <button class="btn" id="export-mp4-btn" disabled>↓ Export MP4</button>
         <button class="btn" id="export-webm-btn" disabled>↓ Export WebM</button>
       </div>
+
+      <!-- RENDER ENGINE CONFIG -->
+      <div style="margin-top:14px; padding:12px 14px; background:var(--bg); border:1px solid var(--border); border-radius:8px;">
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-family:var(--mono); font-size:11px; color:var(--text);">
+            <input type="checkbox" id="server-mode" checked style="width:auto; accent-color:var(--accent);">
+            Render on server (frame-exact, recommended)
+          </label>
+          <div style="flex:1; min-width:220px;">
+            <label style="font-family:var(--mono); font-size:10px; color:var(--text-faint); letter-spacing:0.08em; text-transform:uppercase; display:block; margin-bottom:4px;">Server URL</label>
+            <input type="text" id="server-url" value="http://127.0.0.1:5005" spellcheck="false">
+          </div>
+          <button class="btn ghost" id="ping-server" style="align-self:flex-end;">Test server</button>
+        </div>
+        <div class="empty-hint" style="margin:8px 0 0; text-align:left;">When checked, export sends audio + images + timings to your local ffmpeg server and downloads a frame-exact file. Unchecked falls back to in-browser recording (faster to start, less accurate on long videos).</div>
+      </div>
       <div id="export-progress-wrap" style="display:none; margin-top:14px;">
         <div style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-bottom:6px;" id="export-progress-label">Rendering…</div>
         <div style="height:6px; background:var(--bg); border-radius:3px; overflow:hidden; border:1px solid var(--border);">
@@ -1186,8 +1202,94 @@ function startExport(mimeType) {
   }
 }
 
-$('export-mp4-btn').addEventListener('click', () => startExport('video/mp4;codecs=avc1.42E01E,mp4a.40.2'));
-$('export-webm-btn').addEventListener('click', () => startExport('video/webm;codecs=vp8,opus'));
+$('export-mp4-btn').addEventListener('click', () => {
+  if ($('server-mode').checked) startServerExport('mp4');
+  else startExport('video/mp4;codecs=avc1.42E01E,mp4a.40.2');
+});
+$('export-webm-btn').addEventListener('click', () => {
+  if ($('server-mode').checked) startServerExport('webm');
+  else startExport('video/webm;codecs=vp8,opus');
+});
+
+/* ──────────────────────────────────────────────────────────────
+   SERVER EXPORT — POST audio + images + timings to the ffmpeg backend
+   ─────────────────────────────────────────────────────────── */
+$('ping-server').addEventListener('click', async () => {
+  const base = $('server-url').value.trim().replace(/\/+$/, '');
+  setStatus('r-status', 'pinging server…', 'warn');
+  try {
+    const res = await fetch(`${base}/health`, { method: 'GET' });
+    const j = await res.json();
+    if (j.ok && j.ffmpeg) setStatus('r-status', `server online · ffmpeg ready at ${base}`, 'ok');
+    else if (j.ok) setStatus('r-status', `server online but ffmpeg not found on it`, 'err');
+    else setStatus('r-status', `unexpected response from server`, 'err');
+  } catch (err) {
+    setStatus('r-status', `cannot reach server at ${base} — is it running? (${err.message})`, 'err');
+  }
+});
+
+async function startServerExport(format) {
+  if (!state.aligned) { setStatus('r-status', 'align first', 'err'); return; }
+  if (!state.audioFile) { setStatus('r-status', 'no audio loaded', 'err'); return; }
+
+  const base = $('server-url').value.trim().replace(/\/+$/, '');
+  const cutoff = state.cutoffTime || state.duration;
+
+  // Active segments: have timing + an image, within the cutoff, sorted by start
+  const activeSegs = state.segments
+    .filter(s => s.start != null && s.end != null && s.image && s.start < cutoff)
+    .sort((a, b) => a.start - b.start);
+  if (!activeSegs.length) { setStatus('r-status', 'no segments with images to render', 'err'); return; }
+
+  // Dedupe image File objects → stable indices
+  const fileList = [];
+  const fileIndex = new Map();
+  const segmentsMeta = activeSegs.map(s => {
+    let idx = fileIndex.get(s.image);
+    if (idx === undefined) { idx = fileList.length; fileIndex.set(s.image, idx); fileList.push(s.image); }
+    return { imageIndex: idx, start: s.start, end: Math.min(s.end, cutoff) };
+  });
+
+  const form = new FormData();
+  form.append('audio', state.audioFile, state.audioFile.name);
+  fileList.forEach((file, i) => form.append(`img_${i}`, file, file.name));
+  form.append('segments', JSON.stringify(segmentsMeta));
+  form.append('format', format);
+  form.append('duration', String(cutoff));
+
+  ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = true);
+  $('export-progress-wrap').style.display = 'block';
+  $('export-progress-bar').style.width = '30%';
+  $('export-progress-label').textContent = 'Uploading to server & rendering with ffmpeg…';
+  setStatus('r-status', `rendering ${format.toUpperCase()} on server — this runs faster than real-time`, 'warn');
+
+  try {
+    const res = await fetch(`${base}/render`, { method: 'POST', body: form });
+    if (!res.ok) {
+      let msg = `server error ${res.status}`;
+      try { const j = await res.json(); msg = j.error + (j.log ? ` — ${j.log.slice(-200)}` : ''); } catch {}
+      setStatus('r-status', msg, 'err');
+      $('export-progress-wrap').style.display = 'none';
+      ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = false);
+      return;
+    }
+    $('export-progress-bar').style.width = '90%';
+    $('export-progress-label').textContent = 'Downloading finished video…';
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `reel_forge_export.${format}`;
+    a.click();
+    $('export-progress-bar').style.width = '100%';
+    $('export-progress-wrap').style.display = 'none';
+    ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = false);
+    setStatus('r-status', `exported ${format.toUpperCase()} from server · ${(blob.size/1024/1024).toFixed(1)} MB · ${fmt(cutoff)} · frame-exact`, 'ok');
+  } catch (err) {
+    setStatus('r-status', `server export failed: ${err.message} — is the server running at ${base}?`, 'err');
+    $('export-progress-wrap').style.display = 'none';
+    ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = false);
+  }
+}
 
 /* ──────────────────────────────────────────────────────────────
    INIT
