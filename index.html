@@ -35,7 +35,6 @@
       radial-gradient(900px 500px at 0% 110%, rgba(79,209,224,0.04), transparent 60%);
   }
   ::selection { background: var(--accent); color: #1a0d00; }
-
   /* ── Top bar ─────────────────────────────────────────────── */
   header {
     position: sticky; top: 0; z-index: 50;
@@ -55,7 +54,6 @@
   .brand h1 { font-size: 15px; font-weight: 600; letter-spacing: 0.02em; white-space: nowrap; }
   .brand h1 span { color: var(--accent); }
   .brand .tag { font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 10px; border-left: 1px solid var(--border); padding-left: 12px; }
-
   /* step rail — connected progress line */
   .steps { display: flex; align-items: center; font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
   .step { display: flex; align-items: center; gap: 7px; color: var(--text-faint); }
@@ -71,7 +69,6 @@
   .step.done .dot { border-color: var(--ready); background: rgba(155,225,93,0.1); color: var(--ready); }
   .step.done .dot::after { content: '✓'; }
   .step.active span, .step.done span { color: var(--text); }
-
   /* ── Layout: pipeline left, monitor right ────────────────── */
   main {
     max-width: 1480px; margin: 0 auto; padding: 26px 28px 80px;
@@ -83,7 +80,6 @@
     main { grid-template-columns: 1fr; }
     .monitor-col { position: static; }
   }
-
   /* ── Panels ──────────────────────────────────────────────── */
   .panel {
     background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius);
@@ -104,7 +100,6 @@
   }
   .panel-head .meta { font-family: var(--mono); font-size: 11px; color: var(--text-faint); text-align: right; }
   .panel-body { padding: 20px; }
-
   /* ── Drop zones — viewfinder corner brackets ─────────────── */
   .drop {
     position: relative; border-radius: 8px;
@@ -127,7 +122,6 @@
   .drop .title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
   .drop .hint { font-size: 11px; color: var(--text-faint); font-family: var(--mono); letter-spacing: 0.04em; }
   .drop input { display: none; }
-
   /* ── Buttons ─────────────────────────────────────────────── */
   .btn {
     display: inline-flex; align-items: center; gap: 8px;
@@ -147,7 +141,6 @@
   .btn.ghost { background: transparent; }
   .btn:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
   .btn:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-
   /* ── Audio panel ─────────────────────────────────────────── */
   #waveform { width: 100%; }
   .wave-frame { margin-top: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
@@ -159,7 +152,6 @@
   .audio-meta .m + .m { border-left: 1px solid var(--border); }
   .audio-meta .m .k { color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.1em; font-size: 9px; margin-bottom: 5px; }
   .audio-meta .m .v { color: var(--accent); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
   /* ── Inputs ──────────────────────────────────────────────── */
   textarea, input[type="text"], input[type="password"] {
     width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 7px;
@@ -168,9 +160,65 @@
   }
   textarea:focus, input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,166,35,0.1); }
   textarea { min-height: 150px; line-height: 1.7; }
+  select {
+    width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 7px;
+    color: var(--text); font-family: var(--mono); font-size: 12px; padding: 10px 12px;
+    outline: none; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='6' viewBox='0 0 9 6'%3E%3Cpath d='M1 1l3.5 3.5L8 1' stroke='%235b6372' fill='none' stroke-width='1.4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(245,166,35,0.1); }
   .api-row { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: end; }
   .api-row label { font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 6px; }
-
+  /* ── VOICE LAB (00) ──────────────────────────────────────── */
+  .voice-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(158px, 1fr)); gap: 8px;
+  }
+  .voice-chip {
+    display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: center;
+    padding: 9px 11px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+    border-left: 3px solid var(--border-bright); cursor: pointer;
+    transition: all 0.15s; position: relative;
+  }
+  .voice-chip:hover { border-color: var(--border-bright); border-left-color: var(--accent); }
+  .voice-chip.selected { border-color: var(--accent); border-left-color: var(--accent); background: var(--accent-soft); box-shadow: 0 0 14px rgba(245,166,35,0.08); }
+  .voice-chip.previewing { border-left-color: var(--ready); }
+  .voice-chip .vplay {
+    width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border-bright);
+    background: var(--bg-elev-2); color: var(--text-dim); cursor: pointer; flex-shrink: 0;
+    display: grid; place-items: center; transition: all 0.15s; padding: 0;
+  }
+  .voice-chip .vplay:hover { border-color: var(--accent); color: var(--accent); }
+  .voice-chip .vplay svg { width: 10px; height: 10px; display: block; }
+  .voice-chip .vplay .ic-stop, .voice-chip .vplay .ic-load { display: none; }
+  .voice-chip .vplay.playing { border-color: var(--ready); color: var(--ready); box-shadow: 0 0 8px rgba(155,225,93,0.3); }
+  .voice-chip .vplay.playing .ic-play { display: none; }
+  .voice-chip .vplay.playing .ic-stop { display: block; }
+  .voice-chip .vplay.loading .ic-play { display: none; }
+  .voice-chip .vplay.loading .ic-load { display: block; animation: vspin 0.8s linear infinite; }
+  @keyframes vspin { to { transform: rotate(360deg); } }
+  .voice-chip .vname { font-size: 12.5px; font-weight: 600; color: var(--text); line-height: 1.2; }
+  .voice-chip .vtag { font-family: var(--mono); font-size: 9px; color: var(--text-faint); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
+  .voice-chip.selected .vtag { color: var(--accent); }
+  .voice-chip .veq {
+    position: absolute; top: 9px; right: 9px; display: none; align-items: flex-end; gap: 2px; height: 10px;
+  }
+  .voice-chip.previewing .veq { display: flex; }
+  .voice-chip .veq i { width: 2px; background: var(--ready); border-radius: 1px; animation: eq 0.7s ease-in-out infinite alternate; }
+  .voice-chip .veq i:nth-child(1) { height: 40%; animation-delay: 0s; }
+  .voice-chip .veq i:nth-child(2) { height: 90%; animation-delay: 0.15s; }
+  .voice-chip .veq i:nth-child(3) { height: 60%; animation-delay: 0.3s; }
+  @keyframes eq { from { transform: scaleY(0.35); } to { transform: scaleY(1); } }
+  @media (prefers-reduced-motion: reduce) { .voice-chip .veq i { animation: none; } }
+  .tts-config { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 14px; }
+  .tts-config label, .tts-label { font-family: var(--mono); font-size: 10px; color: var(--text-faint); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 6px; }
+  .tts-result {
+    display: none; margin-top: 14px; padding: 14px; background: var(--bg);
+    border: 1px solid rgba(155,225,93,0.25); border-radius: 8px;
+  }
+  .tts-result .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .tts-result audio { flex: 1; min-width: 220px; height: 38px; }
   /* ── Segments list ───────────────────────────────────────── */
   .segments { display: grid; grid-template-columns: 1fr; gap: 8px; max-height: 440px; overflow-y: auto; padding-right: 6px; }
   .segments::-webkit-scrollbar { width: 6px; }
@@ -193,7 +241,6 @@
   .seg .text { font-size: 13px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .seg .time { font-family: var(--mono); font-size: 11px; color: var(--ready); white-space: nowrap; }
   .seg .time.unmatched { color: var(--text-faint); }
-
   /* ── Image rail ──────────────────────────────────────────── */
   .image-rail { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; margin-top: 14px; }
   .img-card {
@@ -215,7 +262,6 @@
     font-size: 10px; font-weight: 700; display: grid; place-items: center;
   }
   .img-card.unmatched { border-color: rgba(255,107,94,0.4); opacity: 0.45; }
-
   /* ── MONITOR (signature element) ─────────────────────────── */
   .monitor { background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
   .monitor-head {
@@ -227,7 +273,6 @@
   .monitor.live .rec-dot { background: var(--danger); box-shadow: 0 0 8px var(--danger); animation: blink 1.2s infinite; }
   @keyframes blink { 50% { opacity: 0.3; } }
   @media (prefers-reduced-motion: reduce) { .monitor.live .rec-dot { animation: none; } }
-
   /* filmstrip sprockets framing the screen */
   .sprockets {
     height: 14px; background: #07090c;
@@ -242,7 +287,6 @@
     background: repeating-linear-gradient(90deg, transparent 0 11px, #1d242e 11px 21px, transparent 21px 32px);
     border-radius: 3px;
   }
-
   .preview { padding: 0; }
   .preview-canvas {
     width: 100%; aspect-ratio: 16/9; background: #000; overflow: hidden; position: relative;
@@ -267,7 +311,6 @@
   .play-btn svg { width: 16px; height: 16px; }
   .time-display { font-family: var(--mono); font-size: 13px; color: var(--text); font-weight: 500; min-width: 130px; }
   .time-display .total { color: var(--text-faint); }
-
   .timeline-strip {
     position: relative; height: 46px; background: var(--bg); border-radius: 6px; overflow: hidden;
     border: 1px solid var(--border);
@@ -282,7 +325,6 @@
     box-shadow: 0 0 8px rgba(245,166,35,0.8);
   }
   .timeline-cursor::before { content: ''; position: absolute; top: 0; left: -3px; border: 4px solid transparent; border-top: 5px solid var(--accent); }
-
   /* ── Status pills / misc ─────────────────────────────────── */
   .empty-hint { color: var(--text-faint); font-family: var(--mono); font-size: 11px; line-height: 1.7; }
   .status-line { display: flex; gap: 10px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-top: 14px; }
@@ -291,13 +333,11 @@
   .status-pill.ok { color: var(--ready); border-color: rgba(155,225,93,0.35); background: rgba(155,225,93,0.05); }
   .status-pill.warn { color: var(--accent); border-color: rgba(245,166,35,0.35); background: rgba(245,166,35,0.05); }
   .status-pill.err { color: var(--danger); border-color: rgba(255,107,94,0.35); background: rgba(255,107,94,0.05); }
-
   details summary { cursor: pointer; font-family: var(--mono); font-size: 10px; color: var(--text-dim); letter-spacing: 0.08em; text-transform: uppercase; padding: 10px 0; list-style: none; }
   details summary::before { content: '▸ '; color: var(--accent); }
   details[open] summary::before { content: '▾ '; }
   details summary:hover { color: var(--accent); }
   .help-box { background: var(--bg); border: 1px solid var(--border); border-radius: 7px; padding: 14px; font-family: var(--mono); font-size: 11px; color: var(--text-dim); line-height: 1.8; white-space: pre-wrap; margin-top: 4px; }
-
   .config-box { margin-top: 14px; padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; }
   .config-row { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
   .check { display: flex; align-items: center; gap: 8px; cursor: pointer; font-family: var(--mono); font-size: 11px; color: var(--text); padding-bottom: 9px; }
@@ -308,12 +348,10 @@
   }
   .progress-track { height: 7px; background: var(--bg); border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
   #export-progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), #ffb83d); transition: width 0.1s ease; box-shadow: 0 0 10px rgba(245,166,35,0.5); }
-
   #close-preview { display: none; }
 </style>
 </head>
 <body>
-
 <header>
   <div class="brand">
     <div class="logo">R</div>
@@ -328,11 +366,67 @@
     <div class="step" id="step-5"><div class="dot" data-n="5"></div><span>Render</span></div>
   </div>
 </header>
-
 <main>
   <!-- ═══════════ LEFT: PIPELINE ═══════════ -->
   <div class="pipeline">
-
+    <!-- 00 VOICE LAB -->
+    <section class="panel">
+      <div class="panel-head">
+        <h2><span class="num">00</span>Voice lab — synthesize narration</h2>
+        <div class="meta" id="v-meta">13 voices · openai tts</div>
+      </div>
+      <div class="panel-body">
+        <div class="tts-label">Voice — tap ▸ to preview, click chip to select</div>
+        <div class="voice-grid" id="voice-grid"></div>
+        <div style="margin-top:14px;">
+          <div class="tts-label">Narration text</div>
+          <textarea id="tts-text" style="min-height:110px;" placeholder="Paste or write the narration to synthesize… or hit Pull from script after parsing panel 03."></textarea>
+        </div>
+        <div class="tts-config">
+          <div>
+            <label>Model</label>
+            <select id="tts-model">
+              <option value="gpt-4o-mini-tts" selected>gpt-4o-mini-tts · steerable</option>
+              <option value="tts-1">tts-1 · fast</option>
+              <option value="tts-1-hd">tts-1-hd · hi-fi</option>
+            </select>
+          </div>
+          <div>
+            <label>Format</label>
+            <select id="tts-format">
+              <option value="wav" selected>WAV · best for pipeline</option>
+              <option value="mp3">MP3</option>
+              <option value="flac">FLAC</option>
+            </select>
+          </div>
+          <div>
+            <label>Pace</label>
+            <select id="tts-speed">
+              <option value="0.85">0.85× slow</option>
+              <option value="1" selected>1× natural</option>
+              <option value="1.15">1.15× brisk</option>
+              <option value="1.35">1.35× fast</option>
+            </select>
+          </div>
+        </div>
+        <div id="tts-direction-wrap" style="margin-top:12px;">
+          <label class="tts-label">Direction — optional, gpt-4o-mini-tts only</label>
+          <input type="text" id="tts-direction" placeholder="e.g. calm documentary narrator, measured pace, slight gravitas">
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn primary" id="tts-generate">Synthesize voiceover</button>
+          <button class="btn ghost" id="tts-pull-script">Pull narration from script</button>
+        </div>
+        <div class="tts-result" id="tts-result">
+          <div class="row">
+            <audio id="tts-player" controls></audio>
+            <button class="btn primary" id="tts-to-pipeline">→ Send to pipeline</button>
+            <a class="btn ghost" id="tts-download" download>↓ Save</a>
+          </div>
+        </div>
+        <div class="status-line" id="v-status"></div>
+      </div>
+    </section>
     <!-- 01 AUDIO -->
     <section class="panel">
       <div class="panel-head">
@@ -344,7 +438,7 @@
           <input type="file" id="audio-input" accept="audio/*">
           <div class="icon">↓</div>
           <div class="title">Drop audio file or click to upload</div>
-          <div class="hint">WAV · MP3 · M4A · OGG</div>
+          <div class="hint">WAV · MP3 · M4A · OGG — or synthesize one in panel 00</div>
         </div>
         <div class="wave-frame" id="wave-frame" style="display:none;"><div id="waveform"></div></div>
         <div class="audio-meta" id="audio-info" style="display:none;">
@@ -355,7 +449,6 @@
         </div>
       </div>
     </section>
-
     <!-- 02 TRANSCRIBE -->
     <section class="panel">
       <div class="panel-head">
@@ -370,7 +463,6 @@
           <button class="btn ghost" id="change-key" style="padding:4px 10px;">Change</button>
           <button class="btn ghost" id="clear-key" style="padding:4px 10px; color:var(--danger);">Clear</button>
         </div>
-
         <div id="key-entry" class="api-row">
           <div>
             <label>OpenAI API key — saved to <strong>this browser only</strong>, never leaves your machine except to call OpenAI</label>
@@ -378,7 +470,6 @@
           </div>
           <button class="btn primary" id="save-key">Save key</button>
         </div>
-
         <div style="display:flex; align-items:center; gap:14px; margin-top:14px;">
           <button class="btn primary" id="run-whisper" disabled>Transcribe audio</button>
           <div class="empty-hint">Whisper returns word + segment timestamps. Aligner picks the best strategy automatically: 1-to-1 segment map if counts line up, otherwise optimal word alignment (Needleman-Wunsch).</div>
@@ -386,7 +477,6 @@
         <div class="status-line" id="t-status"></div>
       </div>
     </section>
-
     <!-- 03 SCRIPT -->
     <section class="panel">
       <div class="panel-head">
@@ -397,11 +487,9 @@
         <textarea id="script-text" placeholder="SCENE 1
 Narration: &quot;The opening narration goes here.&quot;
 [IMAGE: Description of the image for this scene.]
-
 SCENE 2
 Narration: &quot;The next narration line goes here.&quot;
 [IMAGE: Description of the image for this scene.]
-
 SCENE 3
 Narration: &quot;And so on.&quot;
 [IMAGE: Description of the image for this scene.]"></textarea>
@@ -412,15 +500,12 @@ Narration: &quot;And so on.&quot;
         <details style="margin-top:10px;">
           <summary>Script format spec</summary>
           <div class="help-box">Expected format:
-
   SCENE 1
   Narration: "Your voiceover text goes here."
   [IMAGE: Visual description of the scene.]
-
   SCENE 2
   Narration: "Next narration line."
   [IMAGE: Next scene description.]
-
 — Each SCENE block becomes one segment.
 — The Narration text is used for transcript alignment.
 — The [IMAGE: ...] description is stored and shown in the segment list.
@@ -430,7 +515,6 @@ Narration: &quot;And so on.&quot;
         <div id="segments-list" class="segments" style="margin-top:14px;"></div>
       </div>
     </section>
-
     <!-- 04 IMAGES -->
     <section class="panel">
       <div class="panel-head">
@@ -447,12 +531,9 @@ Narration: &quot;And so on.&quot;
         <div class="image-rail" id="image-rail"></div>
       </div>
     </section>
-
   </div>
-
   <!-- ═══════════ RIGHT: MONITOR + RENDER ═══════════ -->
   <div class="monitor-col">
-
     <div class="monitor preview" id="preview-panel">
       <div class="monitor-head">
         <div class="label"><span class="rec-dot"></span>Program monitor</div>
@@ -474,7 +555,6 @@ Narration: &quot;And so on.&quot;
         </div>
       </div>
     </div>
-
     <!-- 05 RENDER -->
     <section class="panel">
       <div class="panel-head">
@@ -487,7 +567,6 @@ Narration: &quot;And so on.&quot;
           <button class="btn" id="export-mp4-btn" disabled>↓ MP4</button>
           <button class="btn" id="export-webm-btn" disabled>↓ WebM</button>
         </div>
-
         <div class="config-box">
           <div class="config-row">
             <label class="check">
@@ -502,7 +581,6 @@ Narration: &quot;And so on.&quot;
           </div>
           <div class="empty-hint" style="margin-top:10px;">When checked, export sends audio + images + timings to your local ffmpeg server and downloads a frame-exact file. Unchecked falls back to in-browser recording (faster to start, less accurate on long videos).</div>
         </div>
-
         <div id="export-progress-wrap" style="display:none; margin-top:14px;">
           <div style="font-family:var(--mono); font-size:11px; color:var(--text-dim); margin-bottom:6px;" id="export-progress-label">Rendering…</div>
           <div class="progress-track"><div id="export-progress-bar"></div></div>
@@ -510,10 +588,8 @@ Narration: &quot;And so on.&quot;
         <div class="status-line" id="r-status"></div>
       </div>
     </section>
-
   </div>
 </main>
-
 <script>
 /* ──────────────────────────────────────────────────────────────
    API KEY — stored in browser localStorage, never in the file.
@@ -523,7 +599,6 @@ const getKey   = () => { try { return localStorage.getItem(KEY_STORAGE) || ''; }
 const setKey   = (k) => { try { localStorage.setItem(KEY_STORAGE, k); } catch {} };
 const clearKey = ()  => { try { localStorage.removeItem(KEY_STORAGE); } catch {} };
 const maskKey  = (k) => k.length < 10 ? '••••' : `${k.slice(0,3)}…${k.slice(-4)}`;
-
 /* ──────────────────────────────────────────────────────────────
    STATE
    ─────────────────────────────────────────────────────────── */
@@ -544,7 +619,6 @@ const state = {
   isPlaying: false,
   cutoffTime: 0,
 };
-
 const $ = (id) => document.getElementById(id);
 const fmt = (s) => {
   if (!isFinite(s)) return '00:00.00';
@@ -559,7 +633,6 @@ const setStep = (n) => {
   }
 };
 setStep(1);
-
 /* ──────────────────────────────────────────────────────────────
    01 AUDIO
    ─────────────────────────────────────────────────────────── */
@@ -572,14 +645,12 @@ audioDrop.addEventListener('drop', e => {
   if (e.dataTransfer.files[0]) handleAudio(e.dataTransfer.files[0]);
 });
 audioInput.addEventListener('change', e => { if (e.target.files[0]) handleAudio(e.target.files[0]); });
-
 async function handleAudio(file) {
   state.audioFile = file;
   state.audioURL = URL.createObjectURL(file);
   $('m-name').textContent = file.name;
   $('audio-meta').textContent = file.name;
   $('audio-info').style.display = 'grid';
-
   $('wave-frame').style.display = 'block';
   if (state.wavesurfer) state.wavesurfer.destroy();
   state.wavesurfer = WaveSurfer.create({
@@ -613,7 +684,6 @@ async function handleAudio(file) {
   state.wavesurfer.on('pause', () => { state.isPlaying = false; $('preview-panel').classList.remove('live'); });
   state.wavesurfer.on('finish', () => { state.isPlaying = false; $('preview-panel').classList.remove('live'); });
 }
-
 /* ──────────────────────────────────────────────────────────────
    02 WHISPER AUTO-TRANSCRIBE
    ─────────────────────────────────────────────────────────── */
@@ -630,7 +700,6 @@ function refreshKeyUI() {
     $('run-whisper').disabled = true;
   }
 }
-
 $('save-key').addEventListener('click', () => {
   const k = $('whisper-key').value.trim();
   if (!k) { setStatus('t-status', 'paste your OpenAI API key first', 'err'); return; }
@@ -640,24 +709,19 @@ $('save-key').addEventListener('click', () => {
   refreshKeyUI();
   setStatus('t-status', 'key saved to this browser — you will not need to enter it again', 'ok');
 });
-
 $('change-key').addEventListener('click', () => {
   clearKey();
   refreshKeyUI();
   $('whisper-key').focus();
 });
-
 $('clear-key').addEventListener('click', () => {
   if (!confirm('Clear the saved API key from this browser?')) return;
   clearKey();
   refreshKeyUI();
   setStatus('t-status', 'key cleared from this browser', 'ok');
 });
-
 $('whisper-key').addEventListener('keydown', e => { if (e.key === 'Enter') $('save-key').click(); });
-
 refreshKeyUI();
-
 function onAudioReady() {
   if (!getKey()) {
     $('run-whisper').disabled = true;
@@ -669,7 +733,6 @@ function onAudioReady() {
   $('t-meta').textContent = 'audio ready — hit Transcribe';
   setStep(2);
 }
-
 $('run-whisper').addEventListener('click', async () => {
   const key = getKey();
   if (!key) { setStatus('t-status', 'save your OpenAI API key first', 'err'); return; }
@@ -717,14 +780,12 @@ $('run-whisper').addEventListener('click', async () => {
     $('run-whisper').disabled = false;
   }
 });
-
 function setStatus(id, msg, kind) {
   const el = $(id); el.innerHTML = '';
   if (!msg) return;
   const pill = document.createElement('div'); pill.className = 'status-pill ' + (kind || '');
   pill.textContent = msg; el.appendChild(pill);
 }
-
 /* ──────────────────────────────────────────────────────────────
    03 SCRIPT PARSING
    ─────────────────────────────────────────────────────────── */
@@ -732,39 +793,30 @@ $('load-sample').addEventListener('click', () => {
   $('script-text').value = `SCENE 1
 Narration: "Every human alive on Earth right now —"
 [IMAGE: Tock standing alone on the left side of the frame, looking out across a vast sea of tiny stick-figure doodle humans stretching to the right edge of the frame.]
-
 SCENE 2
 Narration: "Every face in every crowd,"
 [IMAGE: Close-up grid of nine simple doodle human faces, each with tiny variations, arranged in a 3x3 grid. Tock peeks in from the bottom corner.]
-
 SCENE 3
 Narration: "Every stranger you have ever passed on the street,"
 [IMAGE: Tock standing on a simple horizontal line, watching three tiny stick-figure doodle humans walk past him in different directions.]
-
 SCENE 4
 Narration: "Descends from the same small group."
 [IMAGE: A small circle in the center containing about six tiny huddled doodle humans. From this circle, simple wobbly line arrows branch outward in many directions.]`;
 });
-
 $('parse-script').addEventListener('click', parseScript);
-
 function parseScript() {
   const raw = $('script-text').value;
   if (!raw.trim()) { $('s-meta').textContent = 'no script'; return; }
-
   const lines = raw.split('\n');
   const segs = [];
   let current = null;
-
   const sceneRe = /^\s*SCENE\s+(\d+)\s*$/i;
   const narrationRe = /^\s*Narration\s*:\s*[""]?(.+?)[""]?\s*$/i;
   const imageRe = /^\s*\[IMAGE\s*:\s*(.+)\]\s*$/i;
-
   for (const line of lines) {
     const sceneMatch = line.match(sceneRe);
     const narMatch   = line.match(narrationRe);
     const imgMatch   = line.match(imageRe);
-
     if (sceneMatch) {
       if (current) segs.push(current);
       const num = parseInt(sceneMatch[1], 10);
@@ -783,14 +835,12 @@ function parseScript() {
     }
   }
   if (current) segs.push(current);
-
   state.segments = segs.filter(s => s.marker);
   $('s-meta').textContent = `${state.segments.length} scenes`;
   matchImagesToSegments();
   renderSegments();
   if (state.segments.length) setStep(4);
 }
-
 function renderSegments() {
   const root = $('segments-list'); root.innerHTML = '';
   if (!state.segments.length) {
@@ -816,7 +866,6 @@ function renderSegments() {
   });
 }
 function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-
 /* ──────────────────────────────────────────────────────────────
    04 IMAGES
    ─────────────────────────────────────────────────────────── */
@@ -829,7 +878,6 @@ imageDrop.addEventListener('drop', e => {
   handleImages(Array.from(e.dataTransfer.files));
 });
 imageInput.addEventListener('change', e => handleImages(Array.from(e.target.files)));
-
 function handleImages(files) {
   files.sort((a,b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
   files.forEach(f => {
@@ -843,7 +891,6 @@ function handleImages(files) {
   matchImagesToSegments();
   renderSegments();
 }
-
 function renderImageRail() {
   const rail = $('image-rail'); rail.innerHTML = '';
   state.images.forEach(img => {
@@ -853,7 +900,6 @@ function renderImageRail() {
     rail.appendChild(card);
   });
 }
-
 function matchImagesToSegments() {
   if (!state.segments.length || !state.images.length) return;
   state.segments.forEach((seg) => {
@@ -882,14 +928,12 @@ function matchImagesToSegments() {
   });
   renderImageRail();
 }
-
 /* ──────────────────────────────────────────────────────────────
    05 ALIGN — segment 1-to-1 fast path OR Needleman-Wunsch
    ─────────────────────────────────────────────────────────── */
 $('align-btn').addEventListener('click', () => {
   if (!state.words.length) { setStatus('r-status', 'transcribe the audio first (step 02)', 'err'); return; }
   if (!state.segments.length) { setStatus('r-status', 'parse a script first (step 03)', 'err'); return; }
-
   const lastImagedIdx = (() => {
     for (let i = state.segments.length - 1; i >= 0; i--) {
       if (state.segments[i].imageURL) return i;
@@ -897,14 +941,11 @@ $('align-btn').addEventListener('click', () => {
     return -1;
   })();
   if (lastImagedIdx === -1) { setStatus('r-status', 'upload images first (step 04)', 'err'); return; }
-
   const activeSegs = state.segments.slice(0, lastImagedIdx + 1);
   const clipped = state.segments.length > activeSegs.length;
   let strategy = '';
   let matched = 0;
-
   state.segments.forEach(s => { s.start = null; s.end = null; });
-
   if (state.whisperSegments.length === state.segments.length) {
     state.segments.forEach((seg, i) => {
       seg.start = state.whisperSegments[i].start;
@@ -914,29 +955,23 @@ $('align-btn').addEventListener('click', () => {
     strategy = `1-to-1 segment map (${state.whisperSegments.length} ↔ ${state.segments.length})`;
   } else {
     const norm = w => w.toLowerCase().replace(/[^a-z0-9]/g, '');
-
     const scriptWords = [];
     state.segments.forEach((seg, sceneIdx) => {
       const tokens = (seg.text || '').split(/\s+/).map(norm).filter(Boolean);
       tokens.forEach(t => scriptWords.push({ w: t, sceneIdx }));
     });
-
     const whisperWords = state.words.map(w => norm(w.word));
     const N = scriptWords.length, M = whisperWords.length;
-
     if (N === 0) {
       setStatus('r-status', 'no narration text to align — check the script', 'err');
       return;
     }
-
     const MATCH = 2, MISMATCH = -1, GAP = -1;
     const rowLen = M + 1;
     const dp   = new Int32Array((N + 1) * rowLen);
     const back = new Uint8Array((N + 1) * rowLen);
-
     for (let i = 1; i <= N; i++) { dp[i * rowLen] = dp[(i-1)*rowLen] + GAP; back[i * rowLen] = 1; }
     for (let j = 1; j <= M; j++) { dp[j] = dp[j-1] + GAP; back[j] = 2; }
-
     for (let i = 1; i <= N; i++) {
       const si = scriptWords[i-1].w;
       const rowI = i * rowLen, rowIm1 = (i-1) * rowLen;
@@ -957,7 +992,6 @@ $('align-btn').addEventListener('click', () => {
         back[rowI + j] = bt;
       }
     }
-
     const sceneFirstW = new Array(state.segments.length).fill(-1);
     const sceneLastW  = new Array(state.segments.length).fill(-1);
     let i = N, j = M;
@@ -974,7 +1008,6 @@ $('align-btn').addEventListener('click', () => {
         j--;
       }
     }
-
     state.segments.forEach((seg, idx) => {
       const f = sceneFirstW[idx], l = sceneLastW[idx];
       if (f !== -1 && l !== -1) {
@@ -982,11 +1015,9 @@ $('align-btn').addEventListener('click', () => {
         seg.end   = state.words[l].end;
       }
     });
-
     matched = activeSegs.filter(s => s.start != null).length;
     strategy = `optimal word alignment (${N} script words ↔ ${M} whisper words)`;
   }
-
   /* interpolate unmatched */
   let interpolated = 0;
   for (let i = 0; i < activeSegs.length; i++) {
@@ -1005,7 +1036,6 @@ $('align-btn').addEventListener('click', () => {
     }
     i += count - 1;
   }
-
   /* close gaps / overlaps */
   for (let i = 1; i < activeSegs.length; i++) {
     const prev = activeSegs[i - 1], curr = activeSegs[i];
@@ -1013,12 +1043,10 @@ $('align-btn').addEventListener('click', () => {
     if (curr.start < prev.end) { const mid = (prev.end + curr.start) / 2; prev.end = mid; curr.start = mid; }
     else if (curr.start > prev.end) curr.start = prev.end;
   }
-
   if (activeSegs[0]) activeSegs[0].start = 0;
   for (let i = activeSegs.length; i < state.segments.length; i++) {
     state.segments[i].start = null; state.segments[i].end = null;
   }
-
   /* smart coverage-based cutting */
   const usableSegs = activeSegs.filter(s =>
     s.imageURL && s.start != null && s.end != null
@@ -1033,7 +1061,6 @@ $('align-btn').addEventListener('click', () => {
   } else {
     state.cutoffTime = lastEnd;
   }
-
   state.aligned = true;
   const clipMsg = clipped ? ` · clipped at ${fmt(state.cutoffTime)} (${activeSegs.length}/${state.segments.length} scenes have images)` : '';
   setStatus('r-status',
@@ -1047,7 +1074,6 @@ $('align-btn').addEventListener('click', () => {
   $('export-webm-btn').disabled = false;
   setStep(5);
 });
-
 /* ──────────────────────────────────────────────────────────────
    PREVIEW
    ─────────────────────────────────────────────────────────── */
@@ -1058,7 +1084,6 @@ $('preview-btn').addEventListener('click', () => {
   previewPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 });
 $('close-preview').addEventListener('click', () => previewPanel.classList.remove('shown'));
-
 $('play-btn').addEventListener('click', () => {
   if (!state.wavesurfer) return;
   state.wavesurfer.playPause();
@@ -1071,7 +1096,6 @@ $('play-btn').addEventListener('click', () => {
       : '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
   }, 50);
 });
-
 function updatePreviewTime(t) {
   const displayEnd = state.cutoffTime || state.duration;
   $('time-display').innerHTML = `${fmt(t)} <span class="total">/ ${fmt(displayEnd)}</span>`;
@@ -1097,7 +1121,6 @@ function updatePreviewTime(t) {
     });
   }
 }
-
 function renderTimelineStrip() {
   const strip = $('timeline-strip');
   strip.querySelectorAll('.timeline-seg').forEach(el => el.remove());
@@ -1114,45 +1137,37 @@ function renderTimelineStrip() {
     strip.insertBefore(seg, $('timeline-cursor'));
   });
 }
-
 /* ──────────────────────────────────────────────────────────────
    EXPORT — canvas + MediaRecorder (browser fallback)
    ─────────────────────────────────────────────────────────── */
 function startExport(mimeType) {
   if (!state.aligned) { setStatus('r-status', 'align first', 'err'); return; }
   if (!state.audioBuffer) { setStatus('r-status', 'no audio loaded', 'err'); return; }
-
   const supported = MediaRecorder.isTypeSupported(mimeType);
   if (!supported) {
     setStatus('r-status', `${mimeType} not supported in this browser — try the other format`, 'err');
     return;
   }
-
   const W = 1280, H = 720, FPS = 30;
   const cutoff = state.cutoffTime || state.duration;
   const activeSegs = state.segments
     .filter(s => s.start != null && s.end != null && s.imageURL)
     .sort((a, b) => a.start - b.start);
-
   ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = true);
   $('export-progress-wrap').style.display = 'block';
-
   const canvas = document.createElement('canvas');
   canvas.width = W; canvas.height = H;
   const ctx2d = canvas.getContext('2d');
-
   const imgCache = {};
   let loaded = 0;
   const urls = [...new Set(activeSegs.map(s => s.imageURL))];
   if (!urls.length) { setStatus('r-status', 'no images to render', 'err'); return; }
-
   urls.forEach(url => {
     const img = new Image();
     img.onload = () => { imgCache[url] = img; loaded++; if (loaded === urls.length) beginRender(); };
     img.onerror = () => { loaded++; if (loaded === urls.length) beginRender(); };
     img.src = url;
   });
-
   function beginRender() {
     const sr = state.audioBuffer.sampleRate;
     const channels = state.audioBuffer.numberOfChannels;
@@ -1164,18 +1179,15 @@ function startExport(mimeType) {
     for (let c = 0; c < channels; c++) {
       trimmed.copyToChannel(state.audioBuffer.getChannelData(c).slice(startSample, endSample), c);
     }
-
     const dest = actx.createMediaStreamDestination();
     const src = actx.createBufferSource();
     src.buffer = trimmed;
     src.connect(dest);
-
     const videoStream = canvas.captureStream(FPS);
     const combinedStream = new MediaStream([
       ...videoStream.getVideoTracks(),
       ...dest.stream.getAudioTracks(),
     ]);
-
     const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
     const chunks = [];
     const recorder = new MediaRecorder(combinedStream, { mimeType, videoBitsPerSecond: 8_000_000 });
@@ -1191,13 +1203,10 @@ function startExport(mimeType) {
       setStatus('r-status', `exported ${ext.toUpperCase()} · ${(blob.size/1024/1024).toFixed(1)} MB · ${fmt(cutoff)}`, 'ok');
       actx.close();
     };
-
     recorder.start(100);
     src.start(0);
-
     const startReal = performance.now();
     let frameId;
-
     function drawFrame() {
       const elapsed = (performance.now() - startReal) / 1000;
       if (elapsed >= cutoff) {
@@ -1205,34 +1214,27 @@ function startExport(mimeType) {
         setTimeout(() => { try { recorder.stop(); } catch (e) {} }, 300);
         return;
       }
-
       let activeSeg = null;
       for (const s of activeSegs) {
         if (s.start <= elapsed) activeSeg = s;
         if (s.start <= elapsed && elapsed < s.end) break;
       }
-
       ctx2d.fillStyle = '#0a0d12';
       ctx2d.fillRect(0, 0, W, H);
-
       if (activeSeg && imgCache[activeSeg.imageURL]) {
         const img = imgCache[activeSeg.imageURL];
         const scale = Math.max(W / img.naturalWidth, H / img.naturalHeight);
         const sw = img.naturalWidth * scale, sh = img.naturalHeight * scale;
         ctx2d.drawImage(img, (W - sw) / 2, (H - sh) / 2, sw, sh);
       }
-
       const pct = Math.min((elapsed / cutoff) * 100, 100);
       $('export-progress-bar').style.width = pct + '%';
       $('export-progress-label').textContent = `Rendering… ${fmt(elapsed)} / ${fmt(cutoff)} (${pct.toFixed(0)}%)`;
-
       frameId = requestAnimationFrame(drawFrame);
     }
-
     drawFrame();
   }
 }
-
 $('export-mp4-btn').addEventListener('click', () => {
   if ($('server-mode').checked) startServerExport('mp4');
   else startExport('video/mp4;codecs=avc1.42E01E,mp4a.40.2');
@@ -1241,7 +1243,6 @@ $('export-webm-btn').addEventListener('click', () => {
   if ($('server-mode').checked) startServerExport('webm');
   else startExport('video/webm;codecs=vp8,opus');
 });
-
 /* ──────────────────────────────────────────────────────────────
    SERVER EXPORT — POST audio + images + timings to ffmpeg backend
    ─────────────────────────────────────────────────────────── */
@@ -1258,19 +1259,15 @@ $('ping-server').addEventListener('click', async () => {
     setStatus('r-status', `cannot reach server at ${base} — is it running? (${err.message})`, 'err');
   }
 });
-
 async function startServerExport(format) {
   if (!state.aligned) { setStatus('r-status', 'align first', 'err'); return; }
   if (!state.audioFile) { setStatus('r-status', 'no audio loaded', 'err'); return; }
-
   const base = $('server-url').value.trim().replace(/\/+$/, '');
   const cutoff = state.cutoffTime || state.duration;
-
   const activeSegs = state.segments
     .filter(s => s.start != null && s.end != null && s.image && s.start < cutoff)
     .sort((a, b) => a.start - b.start);
   if (!activeSegs.length) { setStatus('r-status', 'no segments with images to render', 'err'); return; }
-
   const fileList = [];
   const fileIndex = new Map();
   const segmentsMeta = activeSegs.map(s => {
@@ -1278,20 +1275,17 @@ async function startServerExport(format) {
     if (idx === undefined) { idx = fileList.length; fileIndex.set(s.image, idx); fileList.push(s.image); }
     return { imageIndex: idx, start: s.start, end: Math.min(s.end, cutoff) };
   });
-
   const form = new FormData();
   form.append('audio', state.audioFile, state.audioFile.name);
   fileList.forEach((file, i) => form.append(`img_${i}`, file, file.name));
   form.append('segments', JSON.stringify(segmentsMeta));
   form.append('format', format);
   form.append('duration', String(cutoff));
-
   ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = true);
   $('export-progress-wrap').style.display = 'block';
   $('export-progress-bar').style.width = '30%';
   $('export-progress-label').textContent = 'Uploading to server & rendering with ffmpeg…';
   setStatus('r-status', `rendering ${format.toUpperCase()} on server — this runs faster than real-time`, 'warn');
-
   try {
     const res = await fetch(`${base}/render`, { method: 'POST', body: form });
     if (!res.ok) {
@@ -1319,7 +1313,187 @@ async function startServerExport(format) {
     ['export-mp4-btn','export-webm-btn','align-btn','preview-btn'].forEach(id => $(id).disabled = false);
   }
 }
-
+/* ──────────────────────────────────────────────────────────────
+   00 VOICE LAB — OpenAI TTS with per-voice previews
+   ─────────────────────────────────────────────────────────── */
+const VOICES = [
+  { id: 'alloy',   tag: 'neutral' },
+  { id: 'ash',     tag: 'warm' },
+  { id: 'ballad',  tag: 'melodic · uk' },
+  { id: 'cedar',   tag: 'deep · grounded' },
+  { id: 'coral',   tag: 'bright' },
+  { id: 'echo',    tag: 'resonant' },
+  { id: 'fable',   tag: 'storyteller · uk' },
+  { id: 'marin',   tag: 'most natural' },
+  { id: 'nova',    tag: 'energetic' },
+  { id: 'onyx',    tag: 'authoritative' },
+  { id: 'sage',    tag: 'calm' },
+  { id: 'shimmer', tag: 'light · airy' },
+  { id: 'verse',   tag: 'dynamic' },
+];
+const VOICE_CDN = v => `https://cdn.openai.com/API/docs/audio/${v}.wav`;
+const PREVIEW_TEXT = 'This is a quick preview of my voice for your project.';
+let ttsSelectedVoice = 'marin';
+let ttsPreviewAudio = null, ttsPreviewBtn = null, ttsPreviewChip = null;
+let ttsResultBlob = null, ttsResultFormat = 'wav';
+const ttsPreviewCache = {};
+const vgrid = $('voice-grid');
+VOICES.forEach(v => {
+  const chip = document.createElement('div');
+  chip.className = 'voice-chip' + (v.id === ttsSelectedVoice ? ' selected' : '');
+  chip.dataset.voice = v.id;
+  chip.innerHTML = `
+    <button class="vplay" aria-label="Preview ${v.id}" title="Preview ${v.id}">
+      <svg class="ic-play" viewBox="0 0 12 12" fill="currentColor"><path d="M3 1.5v9l7-4.5-7-4.5z"/></svg>
+      <svg class="ic-stop" viewBox="0 0 12 12" fill="currentColor"><rect x="2.5" y="2.5" width="7" height="7" rx="1"/></svg>
+      <svg class="ic-load" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 1.2a4.8 4.8 0 1 1-4.8 4.8"/></svg>
+    </button>
+    <div>
+      <div class="vname">${v.id.charAt(0).toUpperCase() + v.id.slice(1)}</div>
+      <div class="vtag">${v.tag}</div>
+    </div>
+    <div class="veq"><i></i><i></i><i></i></div>`;
+  vgrid.appendChild(chip);
+  chip.addEventListener('click', e => {
+    if (e.target.closest('.vplay')) return;
+    ttsSelectedVoice = v.id;
+    document.querySelectorAll('.voice-chip').forEach(c =>
+      c.classList.toggle('selected', c.dataset.voice === v.id));
+    $('v-meta').textContent = `voice: ${v.id} · openai tts`;
+  });
+  chip.querySelector('.vplay').addEventListener('click', () => toggleVoicePreview(v.id, chip));
+});
+function stopVoicePreview() {
+  if (ttsPreviewAudio) { ttsPreviewAudio.pause(); ttsPreviewAudio = null; }
+  if (ttsPreviewBtn) { ttsPreviewBtn.classList.remove('playing', 'loading'); ttsPreviewBtn = null; }
+  if (ttsPreviewChip) { ttsPreviewChip.classList.remove('previewing'); ttsPreviewChip = null; }
+}
+async function toggleVoicePreview(voiceId, chip) {
+  const btn = chip.querySelector('.vplay');
+  if (ttsPreviewBtn === btn && ttsPreviewAudio) { stopVoicePreview(); return; }
+  stopVoicePreview();
+  ttsPreviewBtn = btn; ttsPreviewChip = chip;
+  btn.classList.add('loading');
+  try {
+    let src = ttsPreviewCache[voiceId];
+    if (!src) { src = await loadVoicePreview(voiceId); ttsPreviewCache[voiceId] = src; }
+    if (ttsPreviewBtn !== btn) return;
+    const audio = new Audio(src);
+    ttsPreviewAudio = audio;
+    audio.onended = stopVoicePreview;
+    audio.onerror = stopVoicePreview;
+    await audio.play();
+    btn.classList.remove('loading');
+    btn.classList.add('playing');
+    chip.classList.add('previewing');
+  } catch (err) {
+    btn.classList.remove('loading', 'playing');
+    chip.classList.remove('previewing');
+    setStatus('v-status', `preview failed for ${voiceId}: ${err.message}`, 'err');
+  }
+}
+function loadVoicePreview(voiceId) {
+  return new Promise((resolve, reject) => {
+    const url = VOICE_CDN(voiceId);
+    const test = new Audio();
+    let settled = false;
+    test.oncanplaythrough = () => { if (!settled) { settled = true; resolve(url); } };
+    test.onerror = () => { if (!settled) { settled = true; generateVoicePreview(voiceId).then(resolve, reject); } };
+    test.src = url;
+    setTimeout(() => {
+      if (!settled && test.readyState < 3) {
+        settled = true; test.src = '';
+        generateVoicePreview(voiceId).then(resolve, reject);
+      }
+    }, 4000);
+  });
+}
+async function generateVoicePreview(voiceId) {
+  const key = getKey();
+  if (!key) throw new Error('no hosted sample — save your API key in panel 02 to generate previews');
+  const res = await fetch('https://api.openai.com/v1/audio/speech', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice: voiceId, input: PREVIEW_TEXT, response_format: 'mp3' }),
+  });
+  if (!res.ok) {
+    let msg = `api error ${res.status}`;
+    try { msg = (await res.json()).error?.message || msg; } catch {}
+    throw new Error(msg);
+  }
+  return URL.createObjectURL(await res.blob());
+}
+$('tts-model').addEventListener('change', () => {
+  $('tts-direction-wrap').style.display = $('tts-model').value === 'gpt-4o-mini-tts' ? 'block' : 'none';
+});
+$('tts-pull-script').addEventListener('click', () => {
+  if (!state.segments.length) parseScript();
+  if (!state.segments.length) {
+    setStatus('v-status', 'no script parsed — paste a script in panel 03 first', 'err');
+    return;
+  }
+  const narration = state.segments.map(s => s.text).filter(Boolean).join('\n\n');
+  if (!narration) { setStatus('v-status', 'script has no narration lines', 'err'); return; }
+  $('tts-text').value = narration;
+  setStatus('v-status', `pulled narration from ${state.segments.length} scenes · ${narration.length} chars`, 'ok');
+});
+$('tts-generate').addEventListener('click', async () => {
+  const key = getKey();
+  const input = $('tts-text').value.trim();
+  if (!key) { setStatus('v-status', 'save your OpenAI API key in panel 02 first', 'err'); return; }
+  if (!input) { setStatus('v-status', 'write some narration text first', 'err'); return; }
+  if (input.length > 4096) { setStatus('v-status', `text is ${input.length} chars — the API limit is 4096. Trim it or split scenes.`, 'err'); return; }
+  stopVoicePreview();
+  $('tts-generate').disabled = true;
+  setStatus('v-status', `synthesizing with ${ttsSelectedVoice} · ${$('tts-model').value}…`, 'warn');
+  const body = {
+    model: $('tts-model').value,
+    voice: ttsSelectedVoice,
+    input,
+    response_format: $('tts-format').value,
+    speed: parseFloat($('tts-speed').value),
+  };
+  const direction = $('tts-direction').value.trim();
+  if (body.model === 'gpt-4o-mini-tts' && direction) body.instructions = direction;
+  try {
+    const res = await fetch('https://api.openai.com/v1/audio/speech', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) {
+      let msg = `api error ${res.status}`;
+      try { msg = (await res.json()).error?.message || msg; } catch {}
+      if (res.status === 401) msg = 'API rejected the key (401) — update it in panel 02';
+      setStatus('v-status', msg, 'err');
+      $('tts-generate').disabled = false;
+      return;
+    }
+    ttsResultBlob = await res.blob();
+    ttsResultFormat = $('tts-format').value;
+    const url = URL.createObjectURL(ttsResultBlob);
+    $('tts-player').src = url;
+    $('tts-download').href = url;
+    $('tts-download').download = `voiceover_${ttsSelectedVoice}.${ttsResultFormat}`;
+    $('tts-result').style.display = 'block';
+    $('v-meta').textContent = `${ttsSelectedVoice} · ${(ttsResultBlob.size/1024).toFixed(0)} KB · ${ttsResultFormat}`;
+    setStatus('v-status', `voiceover ready · ${ttsSelectedVoice} · ${(ttsResultBlob.size/1024).toFixed(0)} KB — send it to the pipeline or save it`, 'ok');
+    $('tts-player').play().catch(() => {});
+  } catch (err) {
+    setStatus('v-status', `request failed: ${err.message}`, 'err');
+  } finally {
+    $('tts-generate').disabled = false;
+  }
+});
+$('tts-to-pipeline').addEventListener('click', () => {
+  if (!ttsResultBlob) { setStatus('v-status', 'synthesize a voiceover first', 'err'); return; }
+  $('tts-player').pause();
+  const mime = { wav: 'audio/wav', mp3: 'audio/mpeg', flac: 'audio/flac' }[ttsResultFormat] || 'audio/wav';
+  const file = new File([ttsResultBlob], `voiceover_${ttsSelectedVoice}.${ttsResultFormat}`, { type: mime });
+  handleAudio(file);
+  setStatus('v-status', `sent to pipeline as audio source — panel 01 is live`, 'ok');
+  $('audio-drop').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
 /* ──────────────────────────────────────────────────────────────
    INIT
    ─────────────────────────────────────────────────────────── */
